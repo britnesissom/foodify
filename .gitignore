@@ -3,3 +3,4 @@ app/src/main/res/values/keys.xml
 .gradle/
 app/build/
 local.properties
+.DS_Store
