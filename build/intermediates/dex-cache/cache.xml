@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/britne/AndroidStudioProjects/hackdfwrecipe/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="1ee588ff2c4daf7b97c1cbf922a6c7f027285c2f">
+        <dex dex="/Users/britne/AndroidStudioProjects/hackdfwrecipe/app/build/intermediates/pre-dexed/debug/classes-370c6f188d5325e51ad0557bcef455ea61e74af4.jar" />
+    </item>
+    <item
+        jar="/Users/britne/AndroidStudioProjects/hackdfwrecipe/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/libs/internal_impl-22.2.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="57f2ab85c164ff1676ec64dee787981c046fab79">
+        <dex dex="/Users/britne/AndroidStudioProjects/hackdfwrecipe/app/build/intermediates/pre-dexed/debug/internal_impl-22.2.0-7c565bef7d0d4e60df09602416014052cdcf0eeb.jar" />
+    </item>
+    <item
+        jar="/Users/britne/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.2.0/support-annotations-22.2.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="66b42a1f3eb7676070b7ef7f14b603483aecbee1">
+        <dex dex="/Users/britne/AndroidStudioProjects/hackdfwrecipe/app/build/intermediates/pre-dexed/debug/support-annotations-22.2.0-acae1d96761b8d7dc43fcbeb57d6430d16e7fbb4.jar" />
+    </item>
+    <item
+        jar="/Users/britne/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.3.1/ecb6e1f8e4b0e84c4b886c2f14a1500caf309757/gson-2.3.1.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="ecb6e1f8e4b0e84c4b886c2f14a1500caf309757">
+        <dex dex="/Users/britne/AndroidStudioProjects/hackdfwrecipe/app/build/intermediates/pre-dexed/debug/gson-2.3.1-4e6277a3ef1564082bc1a134186c0bf19ad75645.jar" />
+    </item>
+    <item
+        jar="/Users/britne/AndroidStudioProjects/hackdfwrecipe/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="73753982da6bde518f3a4c6b372749981d14d1a0">
+        <dex dex="/Users/britne/AndroidStudioProjects/hackdfwrecipe/app/build/intermediates/pre-dexed/debug/classes-20ec95a07b18bb278b5154a32ed09220e5e3ffa8.jar" />
+    </item>
+    <item
+        jar="/Users/britne/.gradle/caches/modules-2/files-2.1/com.readystatesoftware.sqliteasset/sqliteassethelper/2.0.1/d5f02e4a4d65ec0fbb339f2e4228723d1540bb9f/sqliteassethelper-2.0.1.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="d5f02e4a4d65ec0fbb339f2e4228723d1540bb9f">
+        <dex dex="/Users/britne/AndroidStudioProjects/hackdfwrecipe/app/build/intermediates/pre-dexed/debug/sqliteassethelper-2.0.1-adbf29eb48c8be525745f0d697fd1225754a19a8.jar" />
+    </item>
+    <item
+        jar="/Users/britne/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-lang3/3.4/5fe28b9518e58819180a43a850fbc0dd24b7c050/commons-lang3-3.4.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="5fe28b9518e58819180a43a850fbc0dd24b7c050">
+        <dex dex="/Users/britne/AndroidStudioProjects/hackdfwrecipe/app/build/intermediates/pre-dexed/debug/commons-lang3-3.4-1fa616ff6ef8d96748303f47d2c2086b58f705bb.jar" />
+    </item>
+
+</items>
