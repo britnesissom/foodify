@@ -1,10 +1,8 @@
 package recipegen.hackdfwrecipe;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -17,19 +15,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -143,14 +128,20 @@ public class IngredientChooserActivity extends AppCompatActivity {
         setTextView(ingred2, ingredient2);
         setTextView(ingred3, ingredient3);
 
+        String[] list = {ingred1.getIngredientName(), ingred2.getIngredientName(), ingred3.getIngredientName()};
         //retrieve recipes using food2fork api
-        RetrieveRecipes rr = new RetrieveRecipes(ingred1.getIngredientName(),
-                ingred2.getIngredientName(), ingred3.getIngredientName());
+        RetrieveRecipesAsyncTask rr = new RetrieveRecipesAsyncTask(this, list, new OnRetrieveRecipesFinishedListener() {
+            @Override
+            public void recipesRetrieved(Recipe recipe) {
+                recipesList = recipe;
+                checkForNoRecipesFound();
+            }
+        });
         rr.execute();
     }
 
     //flashes ingredients on screen one after another to make it prettier
-    //kind of like a slot machine except words change in the same spot
+    //words cycle through basically
     private void flashIngredientsOnScreen() {
         new Thread(new Runnable() {
             public void run() {
@@ -240,7 +231,6 @@ public class IngredientChooserActivity extends AppCompatActivity {
         return false;
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -263,78 +253,5 @@ public class IngredientChooserActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-
-    private class RetrieveRecipes extends AsyncTask<Void, Void, JSONObject> {
-
-        private JSONObject jsonObject;
-        private String ingredient1;
-        private String ingredient2;
-        private String ingredient3;
-
-        //retrieves ingredients from IngredientChooserActivity
-        public RetrieveRecipes(String ingredient1, String ingredient2, String ingredient3) {
-            this.ingredient1 = ingredient1;
-            this.ingredient2 = ingredient2;
-            this.ingredient3 = ingredient3;
-
-            convertWhitespace();
-        }
-
-        //converts all whitespace to + symbol for url readability
-        private void convertWhitespace() {
-            ingredient1 = ingredient1.replaceAll("\\s", "+");
-            ingredient2 = ingredient2.replaceAll("\\s", "+");
-            ingredient3 = ingredient3.replaceAll("\\s", "+");
-        }
-
-        @Override
-        protected JSONObject doInBackground(Void... param) {
-
-            //search for recipes using found ingredients from IngredientChooserActivity
-            //must use api key then &q with list of ingredients for query
-            //%2C is a comma
-            String key = getResources().getString(R.string.food2fork);
-            String uri = "http://food2fork.com/api/search" + "?key=" + key + "&q=" +
-                    ingredient1 + "%2C" + ingredient2 + "%2C" + ingredient3;
-            StringBuilder stringBuilder = new StringBuilder();
-
-            try {
-                URL url = new URL(uri);
-                URLConnection urlConnection = url.openConnection();
-                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-
-                int b;
-                //creates json as string
-                while ((b = in.read()) != -1) {
-                    stringBuilder.append((char) b);
-                }
-
-                in.close();
-            }
-            catch(IOException e) {
-                Log.e("IngredientChooser", e.getMessage());
-            }
-
-            //creates actual JSON object with braces
-            try {
-                jsonObject = new JSONObject(stringBuilder.toString());
-
-            } catch (JSONException e) {
-                Log.e("json parser", "error parsing " + e.toString());
-            }
-            return jsonObject;
-        }
-
-        //create Recipe objects
-        //put them in a recipe array to display contents later
-        //in another activity
-        @Override
-        protected void onPostExecute(JSONObject result) {
-            SetRecipes recipes = new SetRecipes(jsonObject);
-            recipesList = recipes.setRecipesToView();
-            checkForNoRecipesFound();
-        }
     }
 }

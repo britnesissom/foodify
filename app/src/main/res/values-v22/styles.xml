@@ -4,6 +4,16 @@
     <style name="AppTheme" parent="@android:style/Theme.Material">
         <!-- Customize your theme here. -->
         <item name="android:dropDownListViewStyle">@style/appStyleSpinner</item>
+
+        <!-- colorPrimary is used for the default action bar background -->
+        <item name="colorPrimary">@color/primaryColor</item>
+
+        <!-- colorPrimaryDark is used for the status bar -->
+        <item name="colorPrimaryDark">@color/primaryColorDark</item>
+
+        <!-- colorAccent is used as the default value for colorControlActivated
+             which is used to tint widgets -->
+        <item name="colorAccent">@color/accentColor</item>
     </style>
 
     <style name="appStyleSpinner" parent="@android:style/Widget.ListView.DropDown">

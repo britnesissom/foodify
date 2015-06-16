@@ -10,6 +10,8 @@
     <string name="num2">Second Ingredient</string>
     <string name="num3">Third Ingredient</string>
 
+    <string name="welcome">Welcome to Foodify!</string>
+
     <string-array name="ingredient_types">
         <item>Sweet</item>
         <item>Savory</item>
@@ -22,7 +24,20 @@
     <string name="favorite">Add to Favorites</string>
     <string name="remove">Remove from Favorites</string>
     <string name="favorited_items">Favorited Recipes</string>
+    <string name="have_ingredients">I ALREADY HAVE INGREDIENTS</string>
     <string name="title_activity_favorited_recipes">FavoritedRecipesActivity</string>
+    <string name="title_activity_home">HomeActivity</string>
+
+    <string name="type_of_selection">Would you like to use random ingredients or your own?</string>
+    <string name="random_ingredients">Random</string>
+    <string name="users_ingredients">Mine</string>
+    <string name="title_activity_user_ingredients">UserIngredientsActivity</string>
+
+    <string name="enter_ingredients">Enter Ingredients</string>
+    <string name="user_enter">Please separate each ingredient with a comma.</string>
+    <string name="ingredients_hint">Enter ingredients here</string>
+    <string name="search">Search</string>
+    <string name="cancel">Cancel</string>
 
 
 </resources>

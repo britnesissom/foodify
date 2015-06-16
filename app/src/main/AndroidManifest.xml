@@ -10,8 +10,9 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".IngredientChooserActivity"
-            android:label="@string/app_name" >
+            android:name=".HomeActivity"
+            android:label="@string/welcome"
+            android:theme="@style/AppTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,14 +20,19 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".IngredientChooserActivity"
+            android:label="@string/app_name"
+            android:parentActivityName=".HomeActivity" >
+        </activity>
+        <activity
             android:name=".DisplayRecipesActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".IngredientChooserActivity">
+            android:parentActivityName=".HomeActivity" >
         </activity>
         <activity
             android:name=".FavoritedRecipesActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".IngredientChooserActivity">
+            android:parentActivityName=".HomeActivity" >
         </activity>
     </application>
 
