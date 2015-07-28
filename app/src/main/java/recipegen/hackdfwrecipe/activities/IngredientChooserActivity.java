@@ -1,4 +1,4 @@
-package recipegen.hackdfwrecipe;
+package recipegen.hackdfwrecipe.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -18,6 +18,16 @@ import android.widget.TextView;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import recipegen.hackdfwrecipe.DBHelper;
+import recipegen.hackdfwrecipe.RestAdapterClient;
+import recipegen.hackdfwrecipe.models.Food2ForkResponse;
+import recipegen.hackdfwrecipe.models.Ingredients;
+import recipegen.hackdfwrecipe.adapters.NothingSelectedSpinnerAdapter;
+import recipegen.hackdfwrecipe.R;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+
 
 /*
 Implement a "which ingredients do you already have?" activity
@@ -26,6 +36,8 @@ New activity to view saved recipes
  */
 public class IngredientChooserActivity extends AppCompatActivity {
 
+    private static final String TAG = "IngredientChooser";
+
     private boolean initializedView = false;
     private TextView ingredient1;
     private TextView ingredient2;
@@ -33,7 +45,6 @@ public class IngredientChooserActivity extends AppCompatActivity {
     private DBHelper dbHelper;
     private Spinner ingredientTypeSpinner;
     private String ingredientType;
-    private Recipe recipesList;
 
     /*
     create the TextViews and button to retrieve/set info
@@ -122,22 +133,66 @@ public class IngredientChooserActivity extends AppCompatActivity {
         }
         dbHelper.close();   //closes db from any edits
 
-
         //set TextView as random ingredients from DBHandler
         setTextView(ingred1, ingredient1);
         setTextView(ingred2, ingredient2);
         setTextView(ingred3, ingredient3);
 
         String[] list = {ingred1.getIngredientName(), ingred2.getIngredientName(), ingred3.getIngredientName()};
-        //retrieve recipes using food2fork api
-        RetrieveRecipesAsyncTask rr = new RetrieveRecipesAsyncTask(this, list, new OnRetrieveRecipesFinishedListener() {
+
+        getRecipes(list);
+    }
+
+    private void getRecipes(final String[] list) {
+        String key = this.getResources().getString(R.string.food2fork);
+
+        RestAdapterClient.getRestClient().getRecipes(key, list[0] + "," + list[1] + "," + list[2],
+                new Callback<Food2ForkResponse>() {
             @Override
-            public void recipesRetrieved(Recipe recipe) {
-                recipesList = recipe;
-                checkForNoRecipesFound();
+            public void success(Food2ForkResponse food2ForkResponse, Response response) {
+                Log.d(TAG, "recipes retrieved!");
+
+                if (food2ForkResponse.getCount() == 0) {
+                    Log.d(TAG, "count is 0");
+                    new Handler().postDelayed(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            new AlertDialog.Builder(IngredientChooserActivity.this)
+                                    .setTitle("No Recipes Found!")
+                                    .setMessage(R.string.no_recipes_found)
+                                    .setPositiveButton(R.string.search_again, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            //go back to ingredients screen
+                                        }
+                                    })
+                                    .show();
+                        }
+                    }, 2500);
+                } else {
+                    new Handler().postDelayed(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            // This method will be executed once the timer is over
+                            // Start your app main activity
+                            Intent intent = new Intent(IngredientChooserActivity.this,
+                                    DisplayRecipesActivity.class);
+                            //intent.putExtra("recipes", recipesList);
+                            intent.putExtra("ingredients", list[0] + "," + list[1] + "," +
+                                    list[2]);
+                            Log.d(TAG, "starting displayrecipes activity");
+                            startActivity(intent);
+                        }
+                    }, 2700);
+                }
             }
-        });
-        rr.execute();
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d(TAG, "error retrieving recipes: " + error.getMessage());
+            }
+                });
     }
 
     //flashes ingredients on screen one after another to make it prettier
@@ -170,46 +225,6 @@ public class IngredientChooserActivity extends AppCompatActivity {
             }, 0, 100);
             }
         }).start();
-    }
-
-    private void checkForNoRecipesFound() {
-        //if there are no recipes containing those ingredients, search using other random ingredients
-        if (recipesList.getTotalNumOfRecipes() == 0) {
-            //alert dialog pops up after words stop rotating
-            new Handler().postDelayed(new Runnable() {
-
-                @Override
-                public void run() {
-                    new AlertDialog.Builder(IngredientChooserActivity.this)
-                            .setTitle("No Recipes Found!")
-                            .setMessage(R.string.no_recipes_found)
-                            .setPositiveButton(R.string.search_again, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    //go back to ingredients screen
-                                }
-                            })
-                            .show();
-                }
-            }, 2500);
-        } else {
-
-            //wait 2.7s before going to display recipes so you know what the ingredients are
-            new Handler().postDelayed(new Runnable() {
-
-                @Override
-                public void run() {
-                    // This method will be executed once the timer is over
-                    // Start your app main activity
-                    Intent intent =
-                            new Intent(IngredientChooserActivity.this, DisplayRecipesActivity.class);
-                    intent.putExtra("recipes", recipesList);
-                    intent.putExtra("ingredients", ingredient1.getText().toString()
-                            + ", " + ingredient2.getText().toString() + ", and "
-                            + ingredient3.getText().toString());
-                    startActivity(intent);
-                }
-            }, 2700);
-        }
     }
 
     //sets the ingredients textview in this activity so user knows what is chosen

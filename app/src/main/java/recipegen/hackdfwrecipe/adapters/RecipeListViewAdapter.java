@@ -1,8 +1,7 @@
-package recipegen.hackdfwrecipe;
+package recipegen.hackdfwrecipe.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -11,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,12 +20,15 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
+import recipegen.hackdfwrecipe.R;
+import recipegen.hackdfwrecipe.models.Recipes;
+
 /**
  * Created by britne on 3/17/15.
  */
 public class RecipeListViewAdapter extends BaseAdapter {
 
-    private List<Recipe> recipeEntries;
+    private List<Recipes> recipesEntries;
     private Context context;
     private int layoutResourceId;
 
@@ -36,15 +37,15 @@ public class RecipeListViewAdapter extends BaseAdapter {
         ImageView image;
     }
 
-    public RecipeListViewAdapter(Context context, List<Recipe> recipeEntries, int layoutResourceId) {
+    public RecipeListViewAdapter(Context context, List<Recipes> recipesEntries, int layoutResourceId) {
         this.context = context;
-        this.recipeEntries = recipeEntries;
+        this.recipesEntries = recipesEntries;
         this.layoutResourceId = layoutResourceId;
     }
 
     @Override
     public int getCount() {
-        return recipeEntries.size();
+        return recipesEntries.size();
     }
 
     @Override
@@ -70,20 +71,20 @@ public class RecipeListViewAdapter extends BaseAdapter {
             v = (ViewHolder) convertView.getTag();
         }
 
-        Recipe recipe = (Recipe) getItem(position);
+        Recipes recipes = (Recipes) getItem(position);
 
         // assign values if the object is not null
-        if(recipe != null) {
+        if(recipes != null) {
             // tag (item ID) values
-            v.recipeTitle.setTag(recipe.getTitle());
+            v.recipeTitle.setTag(recipes.getTitle());
 
             //set image url as picture
-            DownloadImageTask dit = new DownloadImageTask(v.image, recipeEntries.get(position).getImageUrl(),
+            DownloadImageTask dit = new DownloadImageTask(v.image, recipesEntries.get(position).getImage_url(),
                     position);
             dit.execute();
 
-            v.image.setContentDescription("Image for " + recipeEntries.get(position).getTitle());
-            v.recipeTitle.setText(StringEscapeUtils.unescapeHtml4(recipeEntries.get(position).getTitle()));
+            v.image.setContentDescription("Image for " + recipesEntries.get(position).getTitle());
+            v.recipeTitle.setText(StringEscapeUtils.unescapeHtml4(recipesEntries.get(position).getTitle()));
         }
 
         return convertView;
@@ -91,7 +92,7 @@ public class RecipeListViewAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return recipeEntries.get(position);
+        return recipesEntries.get(position);
     }
 
     @Override
@@ -142,6 +143,6 @@ public class RecipeListViewAdapter extends BaseAdapter {
     }
 
     public void remove(int position) {
-        recipeEntries.remove(recipeEntries.get(position));
+        recipesEntries.remove(recipesEntries.get(position));
     }
 }

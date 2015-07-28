@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteQueryBuilder;
 
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
+import recipegen.hackdfwrecipe.models.Ingredients;
+
 /**
  * Created by britne on 4/5/15.
  */

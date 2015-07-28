@@ -1,6 +1,5 @@
-package recipegen.hackdfwrecipe;
+package recipegen.hackdfwrecipe.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +10,10 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import recipegen.hackdfwrecipe.R;
+import recipegen.hackdfwrecipe.models.Recipes;
+import recipegen.hackdfwrecipe.adapters.RecipeListViewAdapter;
+
 /**
  * Created by britne on 6/13/15.
  */
@@ -20,7 +23,7 @@ public abstract class CommonDisplayBehaviorActivity extends AppCompatActivity {
 
     protected void onCreateCommon() {
         ListView recipeEntries = (ListView) findViewById(R.id.recipe_list);
-        final ArrayList<Recipe> recipes = getRecipes();
+        final ArrayList<Recipes> recipes = getRecipes();
         setTitle();
 
         if (getActionBar() != null) {
@@ -37,7 +40,7 @@ public abstract class CommonDisplayBehaviorActivity extends AppCompatActivity {
 
                 //open recipe website in browser
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse(recipes.get(pos).getSourceUrl()));
+                        Uri.parse(recipes.get(pos).getSource_url()));
                 startActivity(browserIntent);
 
             }
@@ -54,5 +57,5 @@ public abstract class CommonDisplayBehaviorActivity extends AppCompatActivity {
 
     protected abstract void setTitle();
 
-    protected abstract ArrayList<Recipe> getRecipes();
+    protected abstract ArrayList<Recipes> getRecipes();
 }

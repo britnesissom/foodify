@@ -1,4 +1,4 @@
-package recipegen.hackdfwrecipe;
+package recipegen.hackdfwrecipe.models;
 
 /**
  * Created by britne on 3/6/15.

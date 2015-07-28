@@ -1,4 +1,4 @@
-package recipegen.hackdfwrecipe;
+package recipegen.hackdfwrecipe.adapters;
 
 import android.content.Context;
 import android.database.DataSetObserver;

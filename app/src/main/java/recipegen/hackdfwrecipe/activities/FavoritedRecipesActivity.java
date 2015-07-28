@@ -1,4 +1,4 @@
-package recipegen.hackdfwrecipe;
+package recipegen.hackdfwrecipe.activities;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +10,10 @@ import android.widget.AdapterView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+
+import recipegen.hackdfwrecipe.R;
+import recipegen.hackdfwrecipe.models.Recipes;
+import recipegen.hackdfwrecipe.SharedPrefsUtility;
 
 
 public class FavoritedRecipesActivity extends CommonDisplayBehaviorActivity {
@@ -30,8 +34,13 @@ public class FavoritedRecipesActivity extends CommonDisplayBehaviorActivity {
         setTitle("Favorite Recipes");
     }
 
-    protected ArrayList<Recipe> getRecipes() {
-        ArrayList<Recipe> faves = prefs.getFavorites(this);
+    protected ArrayList<Recipes> getRecipes() {
+        ArrayList<Recipes> faves = prefs.getFavorites(this);
+
+        if (faves == null) {
+            faves = new ArrayList<>();
+        }
+
         return faves;
     }
 
@@ -50,10 +59,10 @@ public class FavoritedRecipesActivity extends CommonDisplayBehaviorActivity {
         switch (item.getItemId()) {
             case R.id.remove:
                 //gets recipe data to remove from favorites
-                Recipe recipe = (Recipe) getListAdapter().getItem(info.position);
+                Recipes recipes = (Recipes) getListAdapter().getItem(info.position);
 
                 //removes recipe from favorites using sharedpreferences
-                prefs.removeFavorite(this, recipe);
+                prefs.removeFavorite(this, recipes);
                 getListAdapter().remove(info.position);
 
                 //update listview to not include removed recipe

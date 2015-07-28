@@ -1,7 +1,10 @@
-package recipegen.hackdfwrecipe;
+package recipegen.hackdfwrecipe.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -12,17 +15,30 @@ import android.widget.AdapterView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import recipegen.hackdfwrecipe.R;
+import recipegen.hackdfwrecipe.RestAdapterClient;
+import recipegen.hackdfwrecipe.models.Food2ForkResponse;
+import recipegen.hackdfwrecipe.models.Recipes;
+import recipegen.hackdfwrecipe.SharedPrefsUtility;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 
 public class DisplayRecipesActivity extends CommonDisplayBehaviorActivity {
 
     private SharedPrefsUtility prefs;
+    private ArrayList<Recipes> recipesList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_recipes);
 
+        Log.d("DisplayRecipes", "display activity opened");
+        recipesList = new ArrayList<>();
         prefs = new SharedPrefsUtility();
         super.onCreateCommon();
     }
@@ -31,9 +47,26 @@ public class DisplayRecipesActivity extends CommonDisplayBehaviorActivity {
         setTitle("Top Recipes");
     }
 
-    protected ArrayList<Recipe> getRecipes() {
-        Recipe recipesList = getIntent().getParcelableExtra("recipes");
-        return recipesList.getRecipes();
+    protected ArrayList<Recipes> getRecipes() {
+        String key = this.getResources().getString(R.string.food2fork);
+
+        RestAdapterClient.getRestClient().getRecipes(key, getIntent().getStringExtra("ingredients"),
+                new Callback<Food2ForkResponse>() {
+                    @Override
+                    public void success(Food2ForkResponse food2ForkResponse, Response response) {
+                        Log.d("DisplayRecipes", "recipes retrieved!");
+                        Log.d("DisplayRecipes", food2ForkResponse.getRecipes().get(0).getTitle());
+                        recipesList.clear();
+                        recipesList.addAll(food2ForkResponse.getRecipes());
+                        getListAdapter().notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Log.d("DisplayRecipes", "error retrieving recipes: " + error.getMessage());
+                    }
+                });
+        return recipesList;
     }
 
     @Override
@@ -51,10 +84,10 @@ public class DisplayRecipesActivity extends CommonDisplayBehaviorActivity {
         switch (item.getItemId()) {
             case R.id.favorite:
                 //gets recipe data to add to favorites
-                Recipe recipe = (Recipe) getListAdapter().getItem(info.position);
+                Recipes recipes = (Recipes) getListAdapter().getItem(info.position);
 
                 //adds recipe to favorites using sharedpreferences
-                prefs.addFavorite(this, recipe);
+                prefs.addFavorite(this, recipes);
                 Toast.makeText(this, "Recipe Added to Favorites", Toast.LENGTH_SHORT).show();
                 return true;
             default:

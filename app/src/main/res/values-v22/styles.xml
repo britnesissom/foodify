@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="@android:style/Theme.Material">
+    <style name="AppTheme" parent="AppTheme.Base">
         <!-- Customize your theme here. -->
         <item name="android:dropDownListViewStyle">@style/appStyleSpinner</item>
 
