@@ -35,9 +35,12 @@
 
     <string name="enter_ingredients">Enter Ingredients</string>
     <string name="user_enter">Please separate each ingredient with a comma.</string>
-    <string name="ingredients_hint">Enter ingredients here</string>
+    <string name="ingredients_hint">Separate each ingredient with a comma</string>
     <string name="search">Search</string>
     <string name="cancel">Cancel</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

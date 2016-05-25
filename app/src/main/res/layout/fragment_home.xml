@@ -5,8 +5,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="recipegen.hackdfwrecipe.activities.HomeActivity">
+    android:paddingBottom="@dimen/activity_vertical_margin">
 
     <TextView
         android:id="@+id/home_question"
@@ -17,17 +16,18 @@
         android:layout_marginTop="30dp"
         android:textSize="20sp"/>
 
-    <Button
+    <android.support.v7.widget.AppCompatButton
         android:id="@+id/use_random"
         android:layout_marginTop="35dp"
         android:layout_below="@id/home_question"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_toLeftOf="@+id/center"
         android:text="@string/random_ingredients"
-        android:onClick="goToRandom"
-        android:textSize="17sp"
-        android:background="@drawable/ingredient_button"
+        android:textColor="#fff"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        style="@style/Widget.AppCompat.Button.Colored"
         />
 
     <TextView
@@ -42,11 +42,12 @@
         android:layout_marginTop="35dp"
         android:layout_toRightOf="@+id/center"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:textSize="17sp"
+        android:layout_height="wrap_content"
+        android:textColor="#fff"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         android:text="@string/users_ingredients"
-        android:onClick="goToUsers"
-        android:background="@drawable/ingredient_button"
+        style="@style/Widget.AppCompat.Button.Colored"
         />
 
 </RelativeLayout>
