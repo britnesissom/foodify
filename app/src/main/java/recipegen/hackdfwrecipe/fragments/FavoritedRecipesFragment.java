@@ -2,6 +2,7 @@ package recipegen.hackdfwrecipe.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -15,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -59,7 +61,12 @@ public class FavoritedRecipesFragment extends Fragment implements FaveRVAdapter.
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_favorited_recipes, container, false);
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        toolbar.setTitle("Favorites");
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        TextView title = (TextView) view.findViewById(R.id.toolbar_title);
+        String favorites = "Favorites";
+        title.setText(favorites);
 
         if (getActivity().getActionBar() != null) {
             getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -142,34 +149,4 @@ public class FavoritedRecipesFragment extends Fragment implements FaveRVAdapter.
         //update listview to not include removed recipe
         adapter.notifyDataSetChanged();
     }
-
-    /*@Override
-    public void onCreateContextMenu(ContextMenu menu, View v,
-                                    ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        Log.d("FavoritedRecipes", "onCreateContextMenu called");
-        MenuInflater inflater = getActivity().getMenuInflater();
-        inflater.inflate(R.menu.favorite_recipes_context_menu, menu);
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        switch (item.getItemId()) {
-            case R.id.remove:
-                //gets recipe data to remove from favorites
-                //Recipes recipes = (Recipes) getListAdapter().getItem(info.position);
-
-                //removes recipe from favorites using sharedpreferences
-                //prefs.removeFavorite(getContext(), recipes);
-                //adapter.remove(info.position);
-
-                //update listview to not include removed recipe
-                adapter.notifyDataSetChanged();
-
-                return true;
-            default:
-                return super.onContextItemSelected(item);
-        }
-    }*/
 }

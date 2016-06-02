@@ -7,6 +7,6 @@
         android:icon="@drawable/ic_star_white_24dp"
         android:title="@string/favorited_items"
         android:orderInCategory="100"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
 
 </menu>

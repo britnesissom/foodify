@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -68,9 +69,14 @@ public class IngredientChooserFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.fragment_ingredient_chooser, container, false);
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        toolbar.setTitle("Foodify");
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        TextView title = (TextView) view.findViewById(R.id.toolbar_title);
+        title.setText(R.string.app_name);
 
         if (getActivity().getActionBar() != null) {
             getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -128,7 +134,8 @@ public class IngredientChooserFragment extends Fragment {
                     initializedView = true;
                     ingredientType = "Sweet";
                 } else {
-                    if (ingredientTypeSpinner.getSelectedItem().toString().equals("Sweet")) {
+                    if (ingredientTypeSpinner.getSelectedItem() == null || ingredientTypeSpinner
+                            .getSelectedItem().toString().equals("Sweet")) {
                         ingredientType = "Sweet";
                     } else {
                         ingredientType = "Savory";
@@ -196,7 +203,7 @@ public class IngredientChooserFragment extends Fragment {
                                                     .setAction("OK", new View.OnClickListener() {
                                                         @Override
                                                         public void onClick(View v) {}
-                                                    });
+                                                    }).show();
                                         }
                                     });
                                 }
@@ -282,7 +289,7 @@ public class IngredientChooserFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_ingredient_chooser, menu);
+        inflater.inflate(R.menu.menu_home, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 

@@ -23,7 +23,6 @@
         android:gravity="center"
         android:paddingBottom="20dp"
         android:paddingTop="10dp"
-        android:textColor="#fff"
         android:text="Ingredients to Use"
         android:textSize="28sp" />
 

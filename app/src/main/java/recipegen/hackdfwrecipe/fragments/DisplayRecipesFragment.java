@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -15,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -28,6 +30,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+// TODO: add share function for fb, tumblr, twitter?
 public class DisplayRecipesFragment extends Fragment implements RecipeRVAdapter.OnFaveRecipeListener {
 
     private static final String INGREDIENTS = "ingredients";
@@ -70,7 +73,12 @@ public class DisplayRecipesFragment extends Fragment implements RecipeRVAdapter.
         setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.fragment_display_recipes, container, false);
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        toolbar.setTitle("Top Recipes");
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        TextView title = (TextView) view.findViewById(R.id.toolbar_title);
+        String top = "Top Recipes";
+        title.setText(top);
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recipe_rv);
         recyclerView.setHasFixedSize(true);
@@ -120,7 +128,7 @@ public class DisplayRecipesFragment extends Fragment implements RecipeRVAdapter.
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_display_recipes, menu);
+        inflater.inflate(R.menu.menu_home, menu);
     }
 
     @Override
@@ -132,6 +140,7 @@ public class DisplayRecipesFragment extends Fragment implements RecipeRVAdapter.
             FragmentTransaction transaction = getActivity().getSupportFragmentManager()
                     .beginTransaction();
             transaction.replace(R.id.content_frag, FavoritedRecipesFragment.newInstance());
+            transaction.addToBackStack(null);
             transaction.commit();
             return true;
         }

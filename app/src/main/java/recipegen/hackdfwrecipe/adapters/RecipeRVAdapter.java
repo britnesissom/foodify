@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.ArrayList;
@@ -81,7 +82,8 @@ public class RecipeRVAdapter extends RecyclerView.Adapter<RecipeRVAdapter.ViewHo
 
         Picasso.with(context).load(recipesList.get(position).getImage_url())
                 .into(holder.image);
-        holder.image.setContentDescription(recipesList.get(position).getTitle());
+        holder.image.setContentDescription(WordUtils.capitalize(StringEscapeUtils.unescapeHtml4(recipesList
+                .get(position).getTitle())));
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,9 +100,8 @@ public class RecipeRVAdapter extends RecyclerView.Adapter<RecipeRVAdapter.ViewHo
                 listener.onFaveRecipe(recipesList.get(pos));
             }
         });
-        holder.recipeTitle.setText(WordUtils.capitalize(recipesList.get(pos).getTitle()));
-        Log.d("recipeadapter", "holder: " + recipesList.get(pos).getTitle
-                ());
+        holder.recipeTitle.setText(WordUtils.capitalize(StringEscapeUtils.unescapeHtml4
+                (recipesList.get(pos).getTitle())));
     }
 
     @Override

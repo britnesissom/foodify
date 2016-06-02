@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.ArrayList;
@@ -72,8 +73,9 @@ public class FaveRVAdapter extends RecyclerView.Adapter<FaveRVAdapter.ViewHolder
 
         Picasso.with(context).load(recipesList.get(clickPos).getImage_url())
                 .into(holder.image);
-        holder.image.setContentDescription(WordUtils.capitalize(recipesList.get(clickPos)
-                .getTitle()));
+        holder.recipeTitle.setText(recipesList.get(clickPos).getTitle());
+        holder.image.setContentDescription(WordUtils.capitalize(StringEscapeUtils.unescapeHtml4
+                (recipesList.get(clickPos).getTitle())));
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

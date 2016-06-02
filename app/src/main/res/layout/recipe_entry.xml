@@ -21,20 +21,23 @@
         android:layout_width="wrap_content"
         android:textSize="17sp"
         android:layout_toEndOf="@+id/food_image"
+        android:layout_toRightOf="@+id/food_image"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_height="80dp"
         android:layout_toStartOf="@+id/fave_star_btn"
+        android:layout_toLeftOf="@+id/fave_star_btn"
         android:gravity="center_vertical"/>
 
     <ImageView
         android:id="@+id/fave_star_btn"
         android:contentDescription="Favorite star image"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
         android:layout_height="80dp"
         android:scaleType="centerInside"
-        android:src="@drawable/ic_star_white_24dp"
+        android:src="@drawable/ic_star"
         android:clickable="true"/>
 
 </RelativeLayout>
