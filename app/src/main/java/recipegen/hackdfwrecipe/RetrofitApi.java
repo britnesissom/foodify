@@ -1,6 +1,6 @@
 package recipegen.hackdfwrecipe;
 
-import recipegen.hackdfwrecipe.models.Food2ForkResponse;
+import recipegen.hackdfwrecipe.models.RecipePuppyResponse;
 import retrofit.Callback;
 import retrofit.http.GET;
 import retrofit.http.Query;
@@ -10,7 +10,7 @@ import retrofit.http.Query;
  */
 public interface RetrofitApi {
 
-    @GET("/search")
-    void getRecipes(@Query("key") String apiKey, @Query("q") String ingredients,
-                    Callback<Food2ForkResponse> callback);
+    @GET("/")
+    void getRecipes(@Query("i") String ingredients, @Query("p") int page,
+                    Callback<RecipePuppyResponse> callback);
 }

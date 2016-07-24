@@ -1,5 +1,8 @@
 package recipegen.hackdfwrecipe.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by britne on 3/14/15.
  */
@@ -7,35 +10,35 @@ package recipegen.hackdfwrecipe.models;
 /*
 implement Parcelable to be able to pass from activity to activity
  */
-public class Recipes {
+public class Recipes implements Parcelable {
 
-    private String source_url;
+    private String href;
     private String title;
-    private String image_url;
+    private String thumbnail;
     private boolean favorited = false;
 
-    public void setSource_url(String source_url) {
-        this.source_url = source_url;
+    public void setHref(String href) {
+        this.href = href;
     }
 
     public void setTitle(String title) {
         this.title = title;
     }
 
-    public String getSource_url() {
-        return source_url;
+    public String getHref() {
+        return href;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setImage_url(String image_url) {
-        this.image_url = image_url;
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
     }
 
-    public String getImage_url() {
-        return image_url;
+    public String getThumbnail() {
+        return thumbnail;
     }
 
     public boolean isFavorited() {
@@ -44,5 +47,38 @@ public class Recipes {
 
     public void setFavorited(boolean favorited) {
         this.favorited = favorited;
+    }
+
+
+
+    /* parcelable stuff here */
+
+    public int describeContents() {
+        return 0;
+    }
+
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeString(href);
+        out.writeString(title);
+        out.writeString(thumbnail);
+        out.writeByte((byte) (favorited ? 1 : 0));
+    }
+
+    public static final Parcelable.Creator<Recipes> CREATOR
+            = new Parcelable.Creator<Recipes>() {
+        public Recipes createFromParcel(Parcel in) {
+            return new Recipes(in);
+        }
+
+        public Recipes[] newArray(int size) {
+            return new Recipes[size];
+        }
+    };
+
+    private Recipes(Parcel in) {
+        href = in.readString();
+        title = in.readString();
+        thumbnail = in.readString();
+        favorited = in.readByte() != 0;
     }
 }

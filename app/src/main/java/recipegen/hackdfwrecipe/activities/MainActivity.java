@@ -1,8 +1,10 @@
 package recipegen.hackdfwrecipe.activities;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import recipegen.hackdfwrecipe.fragments.HomeFragment;
 import recipegen.hackdfwrecipe.R;

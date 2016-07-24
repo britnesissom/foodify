@@ -6,5 +6,5 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:ellipsize="marquee"
-    android:textColor="#808080"
-    android:text="[Select an Ingredient Type]" />
+    android:textColor="#fff"
+    android:text="@string/select_ingredient_type" />

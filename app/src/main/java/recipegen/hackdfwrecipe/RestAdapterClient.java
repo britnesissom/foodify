@@ -11,7 +11,7 @@ import retrofit.client.OkClient;
 public class RestAdapterClient {
 
     private static RetrofitApi REST_CLIENT;
-    private static String ROOT = "http://food2fork.com/api";
+    private static String ROOT = "http://www.recipepuppy.com/api";
 
     static {
         setupRestClient();

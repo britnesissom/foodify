@@ -10,12 +10,22 @@
         android:contentDescription="photo of delicious dinner"/>
 
     <TextView
+        android:id="@+id/foodify_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="70dp"
+        android:text="Foodify"
+        android:textSize="70sp"
+        android:textColor="#fff"/>
+
+    <TextView
         android:id="@+id/home_question"
         android:text="@string/type_of_selection"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="220dp"
         android:textSize="35sp"
         android:textColor="#fff"/>
 
@@ -46,5 +56,15 @@
         android:layout_centerHorizontal="true"
         style="@style/Widget.AppCompat.Button.Colored"
         />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/view_faves"
+        android:layout_below="@id/use_users_ingredients"
+        android:layout_marginTop="70dp"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="View Favorites"
+        style="@style/Widget.AppCompat.Button.Colored"/>
 
 </RelativeLayout>

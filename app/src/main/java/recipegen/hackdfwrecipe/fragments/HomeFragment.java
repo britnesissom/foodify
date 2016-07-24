@@ -2,6 +2,7 @@ package recipegen.hackdfwrecipe.fragments;
 
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.TextView;
 
 import recipegen.hackdfwrecipe.R;
 
@@ -36,6 +38,13 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        TextView textview = (TextView) view.findViewById(R.id.foodify_title);
+
+        Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(),
+                "Blenda Script.otf");
+        // create a typeface from the raw ttf
+        textview.setTypeface(typeface);
+
         Button random = (Button) view.findViewById(R.id.use_random);
         random.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,6 +52,7 @@ public class HomeFragment extends Fragment {
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager()
                         .beginTransaction();
                 transaction.replace(R.id.content_frag, IngredientChooserFragment.newInstance());
+                transaction.addToBackStack(null);
                 transaction.commit();
             }
         });
@@ -54,10 +64,27 @@ public class HomeFragment extends Fragment {
                 goToUsers();
             }
         });
+
+        Button faves = (Button) view.findViewById(R.id.view_faves);
+        faves.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager()
+                        .beginTransaction();
+                transaction.replace(R.id.content_frag, FavoritedRecipesFragment.newInstance());
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
         return view;
     }
 
     public void goToUsers() {
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager()
+                .beginTransaction();
+        transaction.addToBackStack(null);
+        transaction.commit();
+
         DialogFragment ingredientsDialogFrag = UsersIngredientsDFrag.newInstance();
         ingredientsDialogFrag.show(getChildFragmentManager(), "dialog");
     }

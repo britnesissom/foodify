@@ -71,7 +71,7 @@ public class FaveRVAdapter extends RecyclerView.Adapter<FaveRVAdapter.ViewHolder
 
         final int clickPos = holder.getAdapterPosition();
 
-        Picasso.with(context).load(recipesList.get(clickPos).getImage_url())
+        Picasso.with(context).load(recipesList.get(clickPos).getThumbnail())
                 .into(holder.image);
         holder.recipeTitle.setText(recipesList.get(clickPos).getTitle());
         holder.image.setContentDescription(WordUtils.capitalize(StringEscapeUtils.unescapeHtml4
@@ -80,7 +80,7 @@ public class FaveRVAdapter extends RecyclerView.Adapter<FaveRVAdapter.ViewHolder
             @Override
             public void onClick(View v) {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse(recipesList.get(clickPos).getSource_url()));
+                        Uri.parse(recipesList.get(clickPos).getHref()));
                 context.startActivity(browserIntent);
             }
         });

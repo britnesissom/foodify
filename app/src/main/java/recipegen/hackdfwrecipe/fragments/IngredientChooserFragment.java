@@ -1,6 +1,7 @@
 package recipegen.hackdfwrecipe.fragments;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
@@ -21,16 +22,17 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.RunnableFuture;
 
 import recipegen.hackdfwrecipe.DBHelper;
 import recipegen.hackdfwrecipe.R;
 import recipegen.hackdfwrecipe.RestAdapterClient;
 import recipegen.hackdfwrecipe.adapters.NothingSelectedSpinnerAdapter;
-import recipegen.hackdfwrecipe.models.Food2ForkResponse;
+import recipegen.hackdfwrecipe.models.RecipePuppyResponse;
 import recipegen.hackdfwrecipe.models.Ingredients;
+import recipegen.hackdfwrecipe.models.Recipes;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -93,7 +95,17 @@ public class IngredientChooserFragment extends Fragment {
         foodChooserBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                randomPicker();
+
+                if (ingredientType == null || ingredientType.equals("")) {
+                    Snackbar.make(getActivity().findViewById(R.id.coord_layout), "Please select " +
+                            "ingredient type!", Snackbar.LENGTH_INDEFINITE)
+                            .setAction("OK", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {}
+                            }).show();
+                } else {
+                    randomPicker();
+                }
             }
         });
 
@@ -108,7 +120,7 @@ public class IngredientChooserFragment extends Fragment {
                 ArrayAdapter.createFromResource(getContext(), R.array.ingredient_types,
                         android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
-        ingredientTypeSpinner.setPrompt("Select an ingredient type");
+        ingredientTypeSpinner.setPrompt("[Ingredient Type]");
 
         ingredientTypeSpinner.setAdapter(
                 new NothingSelectedSpinnerAdapter(adapter, R.layout.contact_spinner_row_nothing_selected,
@@ -132,8 +144,12 @@ public class IngredientChooserFragment extends Fragment {
                 //because it will be null
                 if (!initializedView) {
                     initializedView = true;
-                    ingredientType = "Sweet";
                 } else {
+                    TextView selectedText = (TextView) parent.getChildAt(0);
+                    if (selectedText != null) {
+                        selectedText.setTextColor(Color.WHITE);
+                    }
+
                     if (ingredientTypeSpinner.getSelectedItem() == null || ingredientTypeSpinner
                             .getSelectedItem().toString().equals("Sweet")) {
                         ingredientType = "Sweet";
@@ -181,59 +197,65 @@ public class IngredientChooserFragment extends Fragment {
     }
 
     private void getRecipes(final String[] list) {
-        String key = this.getResources().getString(R.string.food2fork);
 
-        RestAdapterClient.getRestClient().getRecipes(key, list[0] + "," + list[1] + "," + list[2],
-                new Callback<Food2ForkResponse>() {
-                    @Override
-                    public void success(Food2ForkResponse food2ForkResponse, Response response) {
-                        Log.d(TAG, "recipes retrieved!");
+        final ArrayList<Recipes> recipes = new ArrayList<>();
 
-                        if (food2ForkResponse.getCount() == 0) {
-                            Log.d(TAG, "count is 0");
-                            new Handler().postDelayed(new Runnable() {
+        for (int i = 0; i < 3; i++) {
+            RestAdapterClient.getRestClient().getRecipes(list[0] + "," + list[1] + "," + list[2], i,
+                    new Callback<RecipePuppyResponse>() {
+                        @Override
+                        public void success(RecipePuppyResponse recipePuppyResponse, Response response) {
+                            Log.d(TAG, "recipes retrieved!");
 
-                                @Override
-                                public void run() {
-                                    getActivity().runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Snackbar.make(getActivity().findViewById(R.id.coord_layout),
-                                                    "No recipes found!", Snackbar.LENGTH_INDEFINITE)
-                                                    .setAction("OK", new View.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(View v) {}
-                                                    }).show();
-                                        }
-                                    });
-                                }
-                            }, 1500);
-                        } else {
-                            new Handler().postDelayed(new Runnable() {
-
-                                @Override
-                                public void run() {
-                                    // This method will be executed once the timer is over
-                                    // Start your app main activity
-                                    String ingredients = list[0] + "," + list[1] + "," + list[2];
-                                    FragmentTransaction transaction =
-                                            getActivity().getSupportFragmentManager()
-                                            .beginTransaction();
-                                    transaction.replace(R.id.content_frag, DisplayRecipesFragment
-                                            .newInstance(ingredients));
-                                    Log.d(TAG, "starting displayrecipes activity");
-                                    transaction.addToBackStack(null);
-                                    transaction.commit();
-                                }
-                            }, 2700);
+                            if (!recipePuppyResponse.getRecipes().isEmpty()) {
+                                recipes.addAll(recipePuppyResponse.getRecipes());
+                            }
                         }
-                    }
 
-                    @Override
-                    public void failure(RetrofitError error) {
-                        Log.d(TAG, "error retrieving recipes: " + error.getMessage());
-                    }
-                });
+                        @Override
+                        public void failure(RetrofitError error) {
+                            Log.d(TAG, "error retrieving recipes: " + error.getMessage());
+                        }
+                    });
+        }
+
+        if (!recipes.isEmpty()) {
+            new Handler().postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    // This method will be executed once the timer is over
+                    // Start your app main activity
+                    FragmentTransaction transaction =
+                            getActivity().getSupportFragmentManager()
+                                    .beginTransaction();
+                    transaction.replace(R.id.content_frag, DisplayRecipesFragment
+                            .newInstance(recipes));
+                    Log.d(TAG, "starting displayrecipes activity");
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
+            }, 2700);
+        } else {
+            new Handler().postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Snackbar.make(getActivity().findViewById(R.id.coord_layout),
+                                    "No recipes found!", Snackbar.LENGTH_INDEFINITE)
+                                    .setAction("OK", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                        }
+                                    }).show();
+                        }
+                    });
+                }
+            }, 1500);
+        }
     }
 
     //flashes ingredients on screen one after another to make it prettier

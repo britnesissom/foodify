@@ -3,9 +3,8 @@ package recipegen.hackdfwrecipe.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import recipegen.hackdfwrecipe.R;
-import recipegen.hackdfwrecipe.SharedPrefsUtility;
 import recipegen.hackdfwrecipe.models.Recipes;
 
 /**
@@ -36,6 +34,7 @@ public class RecipeRVAdapter extends RecyclerView.Adapter<RecipeRVAdapter.ViewHo
 
     public interface OnFaveRecipeListener {
         void onFaveRecipe(Recipes recipe);
+        void onRemoveRecipe(Recipes recipes);
     }
 
     // Provide a reference to the views for each data item
@@ -74,13 +73,11 @@ public class RecipeRVAdapter extends RecyclerView.Adapter<RecipeRVAdapter.ViewHo
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
 
         final int pos = holder.getAdapterPosition();
 
-        //TODO: set already faved recipes to gold star
-
-        Picasso.with(context).load(recipesList.get(position).getImage_url())
+        Picasso.with(context).load(recipesList.get(position).getThumbnail())
                 .into(holder.image);
         holder.image.setContentDescription(WordUtils.capitalize(StringEscapeUtils.unescapeHtml4(recipesList
                 .get(position).getTitle())));
@@ -88,20 +85,44 @@ public class RecipeRVAdapter extends RecyclerView.Adapter<RecipeRVAdapter.ViewHo
             @Override
             public void onClick(View v) {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse(recipesList.get(pos).getSource_url()));
+                        Uri.parse(recipesList.get(pos).getHref()));
                 context.startActivity(browserIntent);
             }
         });
+
+        // make sure you can tell which recipes are faved already
+        if (recipesList.get(pos).isFavorited()) {
+            holder.faveStar.setImageDrawable(ContextCompat.getDrawable(context, R.drawable
+                    .ic_star));
+        } else {
+            holder.faveStar.setImageDrawable(ContextCompat.getDrawable(context, R.drawable
+                    .ic_star_border));
+        }
+
         holder.faveStar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recipesList.get(pos).setFavorited(true);
-                // TODO: set fave to gold star
-                listener.onFaveRecipe(recipesList.get(pos));
+                checkFave(holder, pos);
             }
         });
+
         holder.recipeTitle.setText(WordUtils.capitalize(StringEscapeUtils.unescapeHtml4
                 (recipesList.get(pos).getTitle())));
+    }
+
+    private void checkFave(ViewHolder holder, int pos) {
+        if (recipesList.get(pos).isFavorited()) {
+            recipesList.get(pos).setFavorited(false);
+            holder.faveStar.setImageDrawable(ContextCompat.getDrawable(context, R.drawable
+                    .ic_star_border));
+            listener.onRemoveRecipe(recipesList.get(pos));
+        }
+        else {
+            recipesList.get(pos).setFavorited(true);
+            holder.faveStar.setImageDrawable(ContextCompat.getDrawable(context, R.drawable
+                    .ic_star));
+            listener.onFaveRecipe(recipesList.get(pos));
+        }
     }
 
     @Override

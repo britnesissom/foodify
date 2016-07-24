@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,7 +25,7 @@ import recipegen.hackdfwrecipe.R;
 import recipegen.hackdfwrecipe.RestAdapterClient;
 import recipegen.hackdfwrecipe.SharedPrefsUtility;
 import recipegen.hackdfwrecipe.adapters.RecipeRVAdapter;
-import recipegen.hackdfwrecipe.models.Food2ForkResponse;
+import recipegen.hackdfwrecipe.models.RecipePuppyResponse;
 import recipegen.hackdfwrecipe.models.Recipes;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -33,17 +34,16 @@ import retrofit.client.Response;
 // TODO: add share function for fb, tumblr, twitter?
 public class DisplayRecipesFragment extends Fragment implements RecipeRVAdapter.OnFaveRecipeListener {
 
-    private static final String INGREDIENTS = "ingredients";
+    private static final String RECIPES = "recipes";
 
-    private String ingredients;
     private ArrayList<Recipes> recipesList;
     private RecipeRVAdapter adapter;
     private SharedPrefsUtility prefs;
 
-    public static DisplayRecipesFragment newInstance(String ingredients) {
+    public static DisplayRecipesFragment newInstance(ArrayList<Recipes> recipes) {
         DisplayRecipesFragment fragment = new DisplayRecipesFragment();
         Bundle args = new Bundle();
-        args.putString(INGREDIENTS, ingredients);
+        args.putParcelableArrayList(RECIPES, recipes);
         fragment.setArguments(args);
         return fragment;
     }
@@ -58,12 +58,13 @@ public class DisplayRecipesFragment extends Fragment implements RecipeRVAdapter.
 
         prefs = new SharedPrefsUtility();
         recipesList = new ArrayList<>();
-        adapter = new RecipeRVAdapter(recipesList, getContext(), this);
 
         if (getArguments() != null) {
-            ingredients = getArguments().getString(INGREDIENTS);
-            getRecipes();
+            recipesList = getArguments().getParcelableArrayList(RECIPES);
         }
+
+        adapter = new RecipeRVAdapter(recipesList, getContext(), this);
+
     }
 
     @Override
@@ -74,10 +75,14 @@ public class DisplayRecipesFragment extends Fragment implements RecipeRVAdapter.
         View view = inflater.inflate(R.layout.fragment_display_recipes, container, false);
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        ActionBar bar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (bar != null) {
+            bar.setDisplayShowTitleEnabled(false);
+        }
 
         TextView title = (TextView) view.findViewById(R.id.toolbar_title);
-        String top = "Top Recipes";
+        String top = "Recipes";
         title.setText(top);
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recipe_rv);
@@ -91,35 +96,23 @@ public class DisplayRecipesFragment extends Fragment implements RecipeRVAdapter.
         return view;
     }
 
-    protected ArrayList<Recipes> getRecipes() {
-        String key = this.getResources().getString(R.string.food2fork);
-
-        RestAdapterClient.getRestClient().getRecipes(key, ingredients,
-                new Callback<Food2ForkResponse>() {
-                    @Override
-                    public void success(Food2ForkResponse food2ForkResponse, Response response) {
-                        Log.d("DisplayRecipes", "recipes retrieved!");
-                        Log.d("DisplayRecipes", food2ForkResponse.getRecipes().get(0).getTitle());
-                        recipesList.clear();
-                        recipesList.addAll(food2ForkResponse.getRecipes());
-
-                        adapter.notifyDataSetChanged();
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-                        Log.d("DisplayRecipes", "error retrieving recipes: " + error.getMessage());
-                    }
-                });
-        return recipesList;
-    }
-
     @Override
     public void onFaveRecipe(Recipes recipe) {
         //adds recipe to favorites using sharedpreferences
         prefs.addFavorite(getContext(), recipe);
         Snackbar.make(getActivity().findViewById(R.id.coord_layout), "Added to " +
                 "favorites", Snackbar.LENGTH_INDEFINITE).setAction("OK", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { }
+        }).show();
+    }
+
+    @Override
+    public void onRemoveRecipe(Recipes recipe) {
+        // removes recipe from faves using sharedpreferences
+        prefs.removeFavorite(getContext(), recipe);
+        Snackbar.make(getActivity().findViewById(R.id.coord_layout), "Removed from favorites",
+                Snackbar.LENGTH_INDEFINITE).setAction("OK", new View.OnClickListener() {
             @Override
             public void onClick(View v) { }
         }).show();

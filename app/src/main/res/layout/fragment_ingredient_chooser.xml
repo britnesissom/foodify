@@ -4,12 +4,19 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/parmesan_bg"
+        android:scaleType="centerCrop"
+        android:contentDescription="photo of delicious dinner"/>
+
     <include layout="@layout/app_bar"
              android:id="@+id/app_bar"/>
 
-    <Spinner
+    <android.support.v7.widget.AppCompatSpinner
         android:id="@+id/ingredient_type_spinner"
-        android:layout_width="fill_parent"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/app_bar"
         android:layout_margin="16dp"
@@ -24,7 +31,8 @@
         android:paddingBottom="20dp"
         android:paddingTop="10dp"
         android:text="Ingredients to Use"
-        android:textSize="28sp" />
+        android:textSize="28sp"
+        android:textColor="#fff"/>
 
     <TextView
         android:id="@+id/slot1"
@@ -35,6 +43,7 @@
         android:gravity="center"
         android:layout_margin="10dp"
         android:textSize="20sp"
+        android:textColor="#fff"
         android:text="@string/num1"/>
 
     <TextView
@@ -46,6 +55,7 @@
         android:gravity="center"
         android:layout_margin="10dp"
         android:textSize="20sp"
+        android:textColor="#fff"
         android:text="@string/num2"/>
 
     <TextView
@@ -57,6 +67,7 @@
         android:gravity="center"
         android:layout_margin="10dp"
         android:textSize="20sp"
+        android:textColor="#fff"
         android:text="@string/num3"/>
 
 
@@ -74,12 +85,13 @@
 
     <TextView
         android:id="@+id/app_credit"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Powered by food2fork"
         android:layout_alignParentBottom="true"
         android:textSize="15sp"
+        android:textColor="#fff"
         android:layout_marginBottom="@dimen/activity_vertical_margin"/>
 
 </RelativeLayout>

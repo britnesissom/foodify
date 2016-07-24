@@ -4,7 +4,7 @@
     tools:context="recipegen.hackdfwrecipe.activities.HomeActivity">
     <item
         android:id="@+id/favorited_items"
-        android:icon="@drawable/ic_star_white_24dp"
+        android:icon="@drawable/ic_star"
         android:title="@string/favorited_items"
         android:orderInCategory="100"
         app:showAsAction="never" />
